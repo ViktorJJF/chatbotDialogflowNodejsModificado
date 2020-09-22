@@ -153,23 +153,6 @@ function handleDialogFlowAction(
   parameters
 ) {
   switch (action) {
-    case "Code.DemasElementos.action":
-      sendTextMessage(
-        sender,
-        "A continuación te presento una imagen y un boton"
-      );
-      sendImageMessage(
-        sender,
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQeOnyjNIucV-XNe6DcdOuhKahh9jdNY4RkuQ&usqp=CAU"
-      );
-      sendButtonMessage(sender, [
-        {
-          type: "web_url",
-          url: "https://www.messenger.com",
-          title: "Visit Messenger",
-        },
-      ]);
-      break;
     case "Code.menuCarrusel.action":
       let helados = [
         {
