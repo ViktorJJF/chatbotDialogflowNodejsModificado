@@ -8,6 +8,8 @@ const axios = require("axios");
 const config = require("../config");
 const dialogflow = require("../dialogflow");
 const { structProtoToJson } = require("./helpers/structFunctions");
+//mongodb models
+const ChatbotUser = require("../Models/ChatbotUsers");
 
 // Messenger API parameters
 if (!config.FB_PAGE_TOKEN) {
@@ -108,6 +110,7 @@ async function receivedMessage(event) {
     handleQuickReply(senderId, quickReply, messageId);
     return;
   }
+  saveUserData(senderId);
 
   if (messageText) {
     //send message to dialogflow
@@ -116,6 +119,19 @@ async function receivedMessage(event) {
   } else if (messageAttachments) {
     handleMessageAttachments(messageAttachments, senderId);
   }
+}
+
+function saveUserData(facebookId) {
+  let chatbotUser = new ChatbotUser({
+    firstName: "",
+    lastName: "",
+    facebookId,
+    profilePic: "",
+  });
+  chatbotUser.save((err, res) => {
+    if (err) return console.log(err);
+    console.log("Se creo un usuario:", res);
+  });
 }
 
 function handleMessageAttachments(messageAttachments, senderId) {
