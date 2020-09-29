@@ -10,6 +10,8 @@ const dialogflow = require("../dialogflow");
 const { structProtoToJson } = require("./helpers/structFunctions");
 //mongodb models
 const ChatbotUser = require("../Models/ChatbotUsers");
+const Product = require("../Models/Products");
+const { findOne } = require("../Models/ChatbotUsers");
 
 // Messenger API parameters
 if (!config.FB_PAGE_TOKEN) {
@@ -122,6 +124,8 @@ async function receivedMessage(event) {
 }
 
 async function saveUserData(facebookId) {
+  let isRegistered = await findOne({ facebookId });
+  if (isRegistered) return;
   let userData = await getUserData(facebookId);
   let chatbotUser = new ChatbotUser({
     firstName: userData.first_name,
@@ -170,6 +174,29 @@ async function handleDialogFlowAction(
   parameters
 ) {
   switch (action) {
+    case "Helados.info.action":
+      let icecreamName = parameters.fields.icecreamName.stringValue;
+      let icecreamInfo = await Product.findOne({ name: icecreamName });
+      sendGenericMessage(sender, [
+        {
+          title: icecreamInfo.name + " $" + icecreamInfo.price,
+          image_url: icecreamInfo.img,
+          subtitle: icecreamInfo.description,
+          buttons: [
+            {
+              type: "postback",
+              title: "Hacer compra",
+              payload: "hacer_compra",
+            },
+            {
+              type: "postback",
+              title: "Ver más helados",
+              payload: "ver_mas_helados",
+            },
+          ],
+        },
+      ]);
+      break;
     case "Code.DemasElementos.action":
       await sendTextMessage(sender, "Estoy mandando una imagen y un boton");
       await sendImageMessage(
