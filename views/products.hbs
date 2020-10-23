@@ -1,0 +1,22 @@
+<div class="container">
+  {{#each products}}
+    <div class="row justify-content-center py-3">
+      <div class="card" style="width: 18rem;">
+        <img src="{{img}}" class="card-img-top" alt="..." />
+        <div class="card-body">
+          <h5 class="card-title">
+            {{name}}
+            -
+            {{price}}
+          </h5>
+          <p class="card-text">
+            {{description}}
+          </p>
+          <a href="#" class="btn btn-primary">
+            Realizar pedido
+          </a>
+        </div>
+      </div>
+    </div>
+  {{/each}}
+</div>

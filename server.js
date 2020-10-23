@@ -1,7 +1,16 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
+var exphbs = require("express-handlebars");
 const mongoose = require("mongoose");
+
+app.engine(
+  ".hbs",
+  exphbs({
+    extname: ".hbs",
+  })
+);
+app.set("view engine", ".hbs");
 
 const port = process.env.PORT || 3000;
 
@@ -35,6 +44,8 @@ mongoose.connect(
 
 app.use("/messenger", require("./Facebook/facebookBot"));
 app.use("/api", require("./routes/api"));
+app.use("/", require("./routes/routes"));
+
 app.get("/", (req, res) => {
   return res.send("Chatbot Funcionando 🤖🤖🤖");
 });

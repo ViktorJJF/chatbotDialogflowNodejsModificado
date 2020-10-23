@@ -643,7 +643,6 @@ async function receivedPostback(event) {
   var timeOfPostback = event.timestamp;
 
   var payload = event.postback.payload;
-  let result;
   switch (payload) {
     default:
       //unindentified payload
